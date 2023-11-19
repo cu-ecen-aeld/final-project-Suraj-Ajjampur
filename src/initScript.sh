@@ -1,4 +1,8 @@
 #!/bin/bash
+# This init script checks for deepstream config dependencies and installs it.
+# The check for input and output video is done in this script and the deepstream app is run
+
+
 cd $(dirname $0)
 if [ ! -d /data/cfg/deepstream ]; then
     echo "deepstream config directory doesn't exist, creating from defaults"
@@ -24,6 +28,9 @@ if [ ! -d /output ]; then
 fi
 echo "Setting up peoplenet model"
 ./setup-peoplenet.sh
+
 cp --no-clobber -r cfg-model-default/* /data/cfg/model/
+
+# The bai_deeppstream.txt file consists of configurations used for the application
 ./deepstream-app -c /data/cfg/deepstream/bai_deepstream.txt 2>&1 \
     | tee /data/output/deepstream_logs.txt

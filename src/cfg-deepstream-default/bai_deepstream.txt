@@ -20,11 +20,15 @@
 # DEALINGS IN THE SOFTWARE.
 ################################################################################
 
+# Application section: Setings for performance measurment, interval of performance measurement in
+# seconds and directory specification for GIE KITTI output
 [application]
 enable-perf-measurement=1
 perf-measurement-interval-sec=1
 gie-kitti-output-dir=streamscl
 
+
+# Tilted display configuration which specifies layout, dimensions and the GPU-ID
 [tiled-display]
 enable=0
 rows=1
@@ -34,16 +38,20 @@ height=480
 gpu-id=0
 nvbuf-memory-type=0
 
+# Configuration for the source being used
+# This section needs to be modified for change of source, extra settings are available which need to be looked into
 [source0]
 # See https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_ref_app_deepstream.html#source-group
 enable=1
-#Type - 1=CameraV4L2 2=URI 3=MultiURI
+#Type - 1=CameraV4L2 2=URI 3=MultiURI 4=RTSP 5=Camera(CSI - Jetson Only)
 type=3
 num-sources=1
+# uri to encoded stream, can be a file or an RTSP live source
 uri=file:///input/video.mp4
 gpu-id=0
 cudadec-memtype=0
 
+# Use streammux plugin in case of multiple groups
 [streammux]
 gpu-id=0
 batch-size=1
@@ -53,6 +61,8 @@ width=720
 height=480
 nvbuf-memory-type=0
 
+# Output sink for the application
+# Note: This section needs to be modified for our application
 [sink0]
 # See https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_ref_app_deepstream.html#sink-group
 enable=1
@@ -86,6 +96,8 @@ clock-text-size=12
 clock-color=1;0;0;0
 nvbuf-memory-type=0
 
+# GIE: GPU Inference Engines, specifies the models that can be detected
+# Use the resnet32 model for feature extraction
 [primary-gie]
 enable=1
 gpu-id=0
@@ -98,6 +110,7 @@ labelfile-path=/data/cfg/model/labels.txt
 config-file=/data/cfg/deepstream/bai_tlt_config_infer_primary_peoplenet.txt
 nvbuf-memory-type=0
 
+# Tracker properties
 [tracker]
 enable=1
 tracker-width=640
@@ -110,6 +123,7 @@ gpu-id=0
 #enable-batch-process applicable to DCF only
 enable-batch-process=1
 
+# File to choose the type of analysis needed
 [nvds-analytics]
 enable=1
 config-file=/data/cfg/deepstream/bai_config_nvdsanalytics.txt

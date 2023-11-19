@@ -35,6 +35,9 @@ osd-mode=2
 #Set OSD font size that has to be displayed
 display-font-size=12
 
+# Provide different stream configurations
+# This must be changed for our application 
+# class-id = -1 represents filter for all classes
 ## Per stream configuration
 [roi-filtering-stream-0]
 #enable or disable following feature
@@ -45,6 +48,7 @@ roi-RF=295;643;579;634;642;913;56;828
 inverse-roi=0
 class-id=-1
 
+# Class-ID: 0 corresponds to person
 ## Per stream configuration
 [roi-filtering-stream-2]
 #enable or disable following feature
