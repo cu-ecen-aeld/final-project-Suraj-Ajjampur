@@ -67,7 +67,7 @@ nvbuf-memory-type=0
 # See https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_ref_app_deepstream.html#sink-group
 enable=1
 #Type - 1=FakeSink 2=EglSink 3=File 4=RTSP
-type=3
+type=4
 codec=1
 bitrate=4000000
 nvbuf-memory-type=0

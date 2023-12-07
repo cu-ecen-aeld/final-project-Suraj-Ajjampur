@@ -74,7 +74,7 @@ enable=1
 # line-crossing-<yourname>=x/y direction vector followed by line x;y;x;y 
 # per group.  Use coordinates based on config-width and config-height
 line-crossing-lane1=342;345;403;394;306;397;436;373
-line-crossing-peds=94;421;120;364;60;350;218;350
+line-crossing-peds=94;421;120;364;40;350;250;350
 class-id=-1
 #extended when 0- only counts crossing on the configured Line
 #              1- assumes extended Line crossing counts all the crossing
