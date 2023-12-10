@@ -47,9 +47,14 @@ enable=1
 type=1
 num-sources=1
 # uri to encoded stream, can be a file or an RTSP live source
-uri=v4l2:///dev/video0  # Replace '/dev/video0' with the correct device node for your Logitech C270
+# uri=v4l2:///dev/video0  # Replace '/dev/video0' with the correct device node for your Logitech C270
 gpu-id=0
 cudadec-memtype=0
+camera-fps-n=30
+camera-fps-d=1
+camera-v4l2-dev-node=0
+camera-width=640
+camera-height=480
 
 # Use streammux plugin in case of multiple groups
 [streammux]
