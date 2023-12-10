@@ -44,10 +44,10 @@ nvbuf-memory-type=0
 # See https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_ref_app_deepstream.html#source-group
 enable=1
 #Type - 1=CameraV4L2 2=URI 3=MultiURI 4=RTSP 5=Camera(CSI - Jetson Only)
-type=3
+type=1
 num-sources=1
 # uri to encoded stream, can be a file or an RTSP live source
-uri=file:///input/video.mp4
+uri=v4l2:///dev/video0  # Replace '/dev/video0' with the correct device node for your Logitech C270
 gpu-id=0
 cudadec-memtype=0
 
