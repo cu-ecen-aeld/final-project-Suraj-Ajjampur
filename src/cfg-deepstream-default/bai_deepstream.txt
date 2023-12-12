@@ -87,7 +87,7 @@ gpu-id=0
 iframeinterval=30
 # output-file=/output/overlay.mp4
 # for mp4 output
-# container=1
+# container=1 Not required for RTSP
 [osd]
 enable=1
 gpu-id=0
