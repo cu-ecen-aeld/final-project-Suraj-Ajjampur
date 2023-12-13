@@ -27,12 +27,6 @@ RUN apt-get update && apt-get upgrade && apt-get install -y build-essential \
         gstreamer1.0-libav \
         coreutils
 
-# Check if nvgstcapture-1.0 is available
-RUN if ! command -v nvgstcapture-1.0 &> /dev/null; then \
-        echo "nvgstcapture-1.0 could not be found"; \
-        exit 1; \
-    fi
-
 # This line says to copy everything in the `src` directory 
 # (specified when running docker build) into the $container_build_path
 # we defined in the argument above to prepare for compile
