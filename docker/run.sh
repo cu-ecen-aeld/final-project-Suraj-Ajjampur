@@ -15,12 +15,11 @@ if [ $? -ne 0 ]; then
     datamount="-v $(realpath data-default):/data"
 fi
 
-# Adding device access, host network stack and nvgstcapture present in /usr/bin
+# Adding device access and host network stack
 echo "Running docker with arguments ${datamount} $@"
 docker run --net=host --runtime nvidia \
     --device /dev/video0 \
     --device /dev/buzzer_gpio \
-    -v /usr/bin:/usr/bin \
     ${datamount} \
     $@ \
     -it deepstream-nvdsanalytics-docker
