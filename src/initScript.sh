@@ -17,7 +17,17 @@ if [ ! -e /input/video.mp4 ]; then
     if [ ! -e /data/input/video.mp4 ]; then
        echo "No default video found at /input/video.mp4, copying sample as input"
        mkdir -p /data/input/
-       cp /opt/nvidia/deepstream/deepstream/samples/streams/sample_1080p_h265.mp4 /data/input/video.mp4
+       nvgstcapture-1.0 --mode=2 --camsrc=0 --cap-dev-node=0 --automate --capture-auto --file-name /data/input/video.mp4
+       # Wait for the capture process to complete
+       wait $!
+       # Find the captured file with the pattern and rename it
+       captured_file=$(ls /data/input/video.mp4* | head -n 1)
+       if [ -f "$captured_file" ]; then
+           mv "$captured_file" "/data/input/video.mp4"
+       else
+           echo "The captured file was not found."
+       fi
+       #cp /opt/nvidia/deepstream/deepstream/samples/streams/sample_1080p_h265.mp4 /data/input/video.mp4
     fi
     ln -s /data/input/video.mp4 /input/video.mp4
 fi
