@@ -26,8 +26,39 @@
 #include <vector>
 #include <unordered_map>
 #include <sstream>
+#include <fcntl.h>
+#include <unistd.h>
+#include <cstdlib>
+#include <cstring>
 #include "gstnvdsmeta.h"
 #include "nvds_analytics_meta.h"
+
+
+// Function to control the buzzer GPIO device
+void controlBuzzer(int value) 
+{
+    // Open the GPIO device file
+    int fd = open("/dev/buzzer_gpio", O_WRONLY);
+
+    if (fd == -1) 
+    {
+        perror("Error opening file");
+    }
+
+    // Convert the integer value to a string
+    char buffer[2] = {(char)(value + '0'), '\n'};
+
+    // Write to the file descriptor
+    if (write(fd, buffer, sizeof(buffer)) != sizeof(buffer)) 
+    {
+        perror("Error writing to file");
+        close(fd);
+    }
+
+    // Close the file descriptor
+    close(fd);
+}
+
 
 /* parse_nvdsanalytics_meta_data
  * and extract nvanalytics metadata etc. */
@@ -101,10 +132,31 @@ parse_nvdsanalytics_meta_data (NvDsBatchMeta *batch_meta)
         }
 
 
-        if (out_string.str().size()){
+        if (out_string.str().size())
+	{
             g_print ("Frame Number = %d of Stream = %d,  %s\n",
                     frame_meta->frame_num, frame_meta->pad_index,
                     out_string.str().c_str());
+
+	     // Extract value from out_string
+            size_t pos = out_string.str().find("LineCrossing Cumulative peds = ");
+            if (pos != std::string::npos) 
+	    {
+                std::string value_str = out_string.str().substr(pos + sizeof("LineCrossing Cumulative peds = ") - 1);
+                int value = std::stoi(value_str);
+
+                // Perform action based on the extracted value
+                if (value > 0) 
+		{
+                    // Set buffer to "1" which switches on buzzer
+                    controlBuzzer(1);
+                } 
+		else 
+		{
+                    // Set buffer to "0" which switches off buzzer
+                    controlBuzzer(0);
+                }
+            }
         }
     }
 }
