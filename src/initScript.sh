@@ -13,21 +13,14 @@ cp --no-clobber -r cfg-deepstream-default/* /data/cfg/deepstream/
 mkdir -p /data/cfg/model
 mkdir -p /input
 
-# Define input video file path
-input_file="/data/input/video.mp4"
-
-# Check for the input video file
-if [ ! -f "$input_file" ]; then
-    echo "No default video found, starting capture"
-    nvgstcapture-1.0 --mode=2 --camsrc=0 --cap-dev-node=0 --automate --capture-auto --file-name "$input_file"
-    wait $!
-    captured_file=$(ls ${input_file}_* | head -n 1)
-    [ -f "$captured_file" ] && mv "$captured_file" "$input_file"
+if [ ! -e /input/video.mp4 ]; then
+    if [ ! -e /data/input/video.mp4 ]; then
+       echo "No default video found at /input/video.mp4, copying sample as input"
+       mkdir -p /data/input/
+       cp /opt/nvidia/deepstream/deepstream/samples/streams/sample_1080p_h265.mp4 /data/input/video.mp4
+    fi
+    ln -s /data/input/video.mp4 /input/video.mp4
 fi
-
-# Create a symlink to the input video
-ln -sf "$input_file" /input/video.mp4
-
 if [ ! -d /output ]; then
     echo "No dedicated output mount found, using /data/output dir"
     mkdir -p /data/output
