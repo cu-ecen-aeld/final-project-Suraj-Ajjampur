@@ -27,6 +27,7 @@ https://github.com/cu-ecen-aeld/final-project-Suraj-Ajjampur/issues
 Pre-requisites: 
 * Connect the wifi dongle on the Jetson Nano and ensure you have a wireless network connection established
 * Connect the buzzer/GPIO_Device to Pin 12 & GND on the 40-Pin Header
+* Connect the Logitech C270HD WEBCAM 
 
 Perform the steps given below to build the application code:
 
