@@ -43,18 +43,12 @@ nvbuf-memory-type=0
 [source0]
 # See https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_ref_app_deepstream.html#source-group
 enable=1
-#Type - 1=CameraV4L2 2=URI 3=MultiURI 4=RTSP 5=Camera(CSI - Jetson Only)
-type=1
+#Type - 1=CameraV4L2 2=URI 3=MultiURI
+type=3
 num-sources=1
-# uri to encoded stream, can be a file or an RTSP live source
-# uri=v4l2:///dev/video0  # Replace '/dev/video0' with the correct device node for your Logitech C270
+uri=file:///input/video.mp4
 gpu-id=0
 cudadec-memtype=0
-camera-fps-n=30
-camera-fps-d=1
-camera-v4l2-dev-node=0
-camera-width=640
-camera-height=480
 
 # Use streammux plugin in case of multiple groups
 [streammux]
@@ -67,13 +61,11 @@ height=480
 nvbuf-memory-type=0
 
 # Output sink for the application
-# Note: This section needs to be modified for our application
 [sink0]
 # See https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_ref_app_deepstream.html#sink-group
 enable=1
 #Type - 1=FakeSink 2=EglSink 3=File 4=RTSP
-type=4
-#The encoder to be used to save the file 1: H.264 (hardware) 2: H.265 (hardware)
+type=3
 codec=1
 bitrate=4000000
 nvbuf-memory-type=0
@@ -84,10 +76,9 @@ height=480
 sync=0
 source-id=0
 gpu-id=0
-iframeinterval=30
-# output-file=/output/overlay.mp4
+output-file=/output/overlay.mp4
 # for mp4 output
-# container=1 Not required for RTSP
+container=1
 [osd]
 enable=1
 gpu-id=0
