@@ -13,24 +13,43 @@ cp --no-clobber -r cfg-deepstream-default/* /data/cfg/deepstream/
 mkdir -p /data/cfg/model
 mkdir -p /input
 
-if [ ! -e /input/video.mp4 ]; then
-    if [ ! -e /data/input/video.mp4 ]; then
-       echo "No default video found at /input/video.mp4, copying sample as input"
-       mkdir -p /data/input/
-       nvgstcapture-1.0 --mode=2 --camsrc=0 --cap-dev-node=0 --automate --capture-auto --file-name /data/input/video.mp4
-       # Wait for the capture process to complete
-       wait $!
-       # Find the captured file with the pattern and rename it
-       captured_file=$(ls /data/input/video.mp4* | head -n 1)
-       if [ -f "$captured_file" ]; then
-           mv "$captured_file" "/data/input/video.mp4"
-       else
-           echo "The captured file was not found."
-       fi
-       #cp /opt/nvidia/deepstream/deepstream/samples/streams/sample_1080p_h265.mp4 /data/input/video.mp4
+# Define the directory and file name
+input_dir="/data/input"
+input_file="video.mp4"
+
+# Create the directory if it doesn't exist
+mkdir -p "$input_dir"
+
+# Check if the default video file exists
+if [ ! -f "${input_dir}/${input_file}" ]; then
+    echo "No default video found at ${input_dir}/${input_file}, starting capture"
+
+    # Start capturing the video with nvgstcapture-1.0
+    nvgstcapture-1.0 --mode=2 --camsrc=0 --cap-dev-node=0 --automate --capture-auto --file-name "${input_dir}/${input_file}" &
+
+    # Wait for the capture process to complete
+    wait $!
+
+    # Find the captured file with the pattern and rename it
+    captured_file=$(ls ${input_dir}/${input_file}* | head -n 1)
+    if [ -f "$captured_file" ]; then
+        echo "Captured file found: $captured_file"
+        # Only rename the file if it does not already have the correct name
+        if [ "$captured_file" != "${input_dir}/${input_file}" ]; then
+            mv "$captured_file" "${input_dir}/${input_file}"
+        fi
+    else
+        echo "The captured file was not found."
     fi
-    ln -s /data/input/video.mp4 /input/video.mp4
+else
+    echo "Default video already exists at ${input_dir}/${input_file}"
 fi
+
+# Create a symlink to the input video if it doesn't already exist
+if [ ! -L "/input/${input_file}" ]; then
+    ln -s "${input_dir}/${input_file}" "/input/${input_file}"
+fi
+
 if [ ! -d /output ]; then
     echo "No dedicated output mount found, using /data/output dir"
     mkdir -p /data/output
