@@ -15,11 +15,14 @@ if [ $? -ne 0 ]; then
     datamount="-v $(realpath data-default):/data"
 fi
 
-# Adding device access and host network stack
-echo "Running docker with arguments ${datamount} $@"
+# Other parts of your script remain the same
+
+# Starting the Docker container with /bin/bash as entry point
+echo "Starting Docker container with bash shell. Run the application manually after any desired commands."
 docker run --net=host --runtime nvidia \
     --device /dev/video0 \
     --device /dev/buzzer_gpio \
+    -v /usr/bin:/usr/bin \
     ${datamount} \
     $@ \
-    -it deepstream-nvdsanalytics-docker
+    -it --entrypoint /bin/bash deepstream-nvdsanalytics-docker
